@@ -194,6 +194,7 @@ class UserController extends ApiController {
 				'email',
 				'cover_pic',
 				'about_us',
+				'user_type',
 				'profile'
 			],
 			limit: [ offset, limit ],
