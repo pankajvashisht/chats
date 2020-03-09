@@ -3,3 +3,4 @@ build
 rou.sql
 server/public/uploads
 .env
+build.zip
