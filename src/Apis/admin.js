@@ -29,7 +29,7 @@ export const updateAppInfo = (data) => {
 };
 export const addUser = (data) => {
 	const form = new FormData();
-	form.append('name', data.first_name);
+	form.append('name', data.name);
 	form.append('email', data.email);
 	form.append('password', data.password);
 	form.append('profile', data.profile);

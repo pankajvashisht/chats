@@ -70,7 +70,7 @@ const AddListener = React.memo(() => {
 												value={userForm.name}
 												onChange={({ target }) => handleInput('name', target.value)}
 												name="name"
-												placeholder="First Name"
+												placeholder="Name"
 											/>
 										</FormGroup>
 									</Colxx>
