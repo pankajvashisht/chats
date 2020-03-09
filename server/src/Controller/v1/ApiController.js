@@ -129,6 +129,7 @@ class ApiController {
 				'about_us',
 				'profile',
 				'is_private',
+				'user_type',
 				'authorization_key'
 			]
 		});
