@@ -2,11 +2,8 @@ const { vaildation } = require('../../utils/DataValidation');
 const app = require('../../libary/CommanMethod');
 module.exports = async (Request, res, next) => {
 	const requried = {
-		first_name: Request.body.first_name,
-		last_name: Request.body.last_name,
+		name: Request.body.name,
 		email: Request.body.email,
-		phone: Request.body.phone,
-		phone_code: Request.body.phone_code,
 		user_type: Request.body.user_type,
 		password: Request.body.password,
 		checkexist: 1

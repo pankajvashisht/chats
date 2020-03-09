@@ -12,7 +12,7 @@ export const initialState = {
 	email: '',
 	password: '',
 	profile: '',
-	user_type:0
+	user_type:1
 };
 
 export const quillFormats = [

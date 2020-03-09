@@ -63,28 +63,14 @@ const AddUser = React.memo(() => {
 								<FormGroup row>
 									<Colxx sm={6}>
 										<FormGroup>
-											<Label for="exampleEmailGrid">First Name</Label>
+											<Label for="exampleEmailGrid">Name</Label>
 											<Input
 												type="text"
 												required={true}
-												value={userForm.first_name}
-												onChange={({ target }) => handleInput('first_name', target.value)}
+												value={userForm.name}
+												onChange={({ target }) => handleInput('name', target.value)}
 												name="name"
 												placeholder="First Name"
-											/>
-										</FormGroup>
-									</Colxx>
-
-									<Colxx sm={6}>
-										<FormGroup>
-											<Label for="examplePasswordGrid">Last Name</Label>
-											<Input
-												type="text"
-												required={true}
-												value={userForm.last_name}
-												onChange={({ target }) => handleInput('last_name', target.value)}
-												name="last_name"
-												placeholder="Last  Name"
 											/>
 										</FormGroup>
 									</Colxx>
@@ -115,20 +101,6 @@ const AddUser = React.memo(() => {
 											/>
 										</FormGroup>
 									</Colxx>
-									<Colxx sm={6}>
-										<FormGroup>
-											<Label for="exampleEmailGrid">Phone</Label>
-											<Input
-												type="number"
-												required={true}
-												value={userForm.phone}
-												onChange={({ target }) => handleInput('phone', target.value)}
-												name="phone"
-												placeholder="Phone"
-											/>
-										</FormGroup>
-									</Colxx>
-
 									<Colxx sm={6}>
 										<FormGroup>
 											<Label for="examplePasswordGrid">Profile</Label>

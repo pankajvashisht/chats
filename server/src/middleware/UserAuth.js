@@ -16,12 +16,9 @@ const UserAuth = async (req, res, next) => {
 			},
 			fields: [
 				'id',
-				'first_name',
-				'last_name',
+				'name',
 				'status',
 				'email',
-				'phone',
-				'phone_code',
 				'profile',
 				'authorization_key',
 				'otp',

@@ -27,7 +27,7 @@ export const servicePath = 'https://api.coloredstrategies.com';
 export const apiUrl = () => {
 	const { location } = window;
 	if (location.hostname === 'localhost') {
-		return `http://localhost:4002/admins`;
+		return `http://localhost:3000/admins`;
 	} else {
 		return `${location.origin}/admins`;
 	}

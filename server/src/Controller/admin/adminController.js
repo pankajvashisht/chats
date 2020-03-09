@@ -47,10 +47,10 @@ class adminController extends ApiController {
 		let offset = req.params.offset || 1;
 		const limit = req.params.limit || 20;
 		offset = (offset - 1) * limit;
-		let conditions = '';
+		let conditions = 'where user_type = 0 ';
 		if (req.query.q && req.query.q !== 'undefined') {
 			const { q } = req.query;
-			conditions += ` where first_name like '%${q}%' or last_name like '%${q}%' or email like '%${q}%' or phone like '%${q}%'`;
+			conditions += ` and name like '%${q}%'  or email like '%${q}%'`;
 		}
 		const query = `select * from users ${conditions} order by id desc limit ${offset}, ${limit}`;
 		const total = `select count(*) as total from users ${conditions}`;
@@ -60,7 +60,23 @@ class adminController extends ApiController {
 		};
 		return result;
 	}
-
+	async allListener(req) {
+		let offset = req.params.offset || 1;
+		const limit = req.params.limit || 20;
+		offset = (offset - 1) * limit;
+		let conditions = 'where user_type = 1 ';
+		if (req.query.q && req.query.q !== 'undefined') {
+			const { q } = req.query;
+			conditions += ` and name like '%${q}%'  or email like '%${q}%'`;
+		}
+		const query = `select * from users ${conditions} order by id desc limit ${offset}, ${limit}`;
+		const total = `select count(*) as total from users ${conditions}`;
+		const result = {
+			pagination: await super.Paginations(total, offset, limit),
+			result: app.addUrl(await DB.first(query), 'profile')
+		};
+		return result;
+	}
 	async addUser(Request) {
 		const { body } = Request;
 		if (body.email) {
@@ -68,13 +84,6 @@ class adminController extends ApiController {
 			const email = await DB.first(query);
 			if (email.length > 0) {
 				throw new ApiError('Email Already registered Please use another');
-			}
-		}
-		if (body.phone) {
-			const query1 = `select * from users where email = '${body.phone}'`;
-			const phone = await DB.first(query1);
-			if (phone.length > 0) {
-				throw new ApiError('Phone Already registered Please use another');
 			}
 		}
 		delete body.profile;
@@ -183,13 +192,11 @@ class adminController extends ApiController {
 	}
 
 	async dashboard() {
-		const posts = await DB.first('select count(*) as total from posts');
-		const users = await DB.first('select count(id) as total from users ');
-		const gifs = await DB.first('select count(id) as total from gifs');
+		const users = await DB.first('select count(id) as total from users where user_type=0 ');
+		const listern = await DB.first('select count(id) as total from users where user_type=1');
 		return {
-			total_posts: posts[0].total,
 			total_users: users[0].total,
-			total_gifs: gifs[0].total
+			total_listern: listern[0].total
 		};
 	}
 

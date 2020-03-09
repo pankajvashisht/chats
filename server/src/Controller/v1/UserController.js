@@ -111,7 +111,7 @@ class UserController extends ApiController {
 			conditions: {
 				email: request_data.email
 			},
-			fields: [ 'id', 'email', 'first_name', 'last_name' ]
+			fields: [ 'id', 'email', 'name' ]
 		});
 		if (!user_info) throw new ApiError(lang[req.lang].mailNotFound);
 		user_info.otp = request_data.otp;
@@ -122,8 +122,8 @@ class UserController extends ApiController {
 			subject: 'Forgot Password',
 			template: 'forgot_password',
 			data: {
-				first_name: user_info.first_name,
-				last_name: user_info.last_name,
+				first_name: user_info.name,
+				last_name: user_info.name,
 				url: appURL + 'users/change_password/' + user_info.forgot_password_hash
 			}
 		};
@@ -189,11 +189,9 @@ class UserController extends ApiController {
 			},
 			fields: [
 				'users.id',
-				'first_name',
-				'last_name',
+				'name',
 				'status',
 				'email',
-				'phone',
 				'cover_pic',
 				'about_us',
 				'profile'
@@ -203,8 +201,7 @@ class UserController extends ApiController {
 		};
 		if (search) {
 			condition.conditions['like'] = {
-				first_name: search,
-				last_name: search,
+				name: search,
 				email: search
 			};
 		}
@@ -248,8 +245,7 @@ class UserController extends ApiController {
 			id: req.body.user_id
 		};
 		const non_required = {
-			first_name: req.body.first_name,
-			last_name: req.body.last_name
+			name: req.body.name,
 		};
 		const request_data = await super.vaildation(required, non_required);
 		if (req.files && req.files.profile) {
@@ -284,16 +280,12 @@ class UserController extends ApiController {
 			subject: 'User Account Verification',
 			template: 'user_signup',
 			data: {
-				first_name: request_data.username,
-				last_name: request_data.username,
+				first_name: request_data.name,
+				last_name: request_data.name,
 				url: appURL + 'users/verify/' + request_data.authorization_key
 			}
 		};
 		try {
-			app.sendSMS({
-				to: `${request_data.phone_code}${request_data.phone}`,
-				message: `${request_data.otp} ${lang[request_data.lang].OTP}`
-			});
 			app.send_mail(mail);
 			return true;
 		} catch (error) {

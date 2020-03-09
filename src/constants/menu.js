@@ -24,37 +24,23 @@ const data = [
 		]
 	},
 	{
-		id: 'Gif',
-		icon: 'iconsminds-shop-2',
-		label: 'Gif',
-		to: '/gif',
+		id: 'Listener',
+		icon: 'simple-icon-people',
+		label: 'Listener',
+		to: '/listener',
 		subs: [
 			{
-				icon: 'iconsminds-shop',
-				label: 'Gif',
-				to: '/gifs'
+				icon: 'simple-icon-user',
+				label: 'Listener',
+				to: '/listener'
 			},
 			{
-				icon: 'iconsminds-add-basket',
-				label: 'Add Gif',
-				to: '/add-gif'
+				icon: 'iconsminds-add-user',
+				label: 'Add Listener',
+				to: '/add-listener'
 			}
 		]
 	},
-	{
-		id: 'Posts',
-		icon: 'iconsminds-crown-2',
-		label: 'Posts',
-		to: '/posts',
-		subs: [
-			{
-				icon: 'iconsminds-crown-2',
-				label: 'posts',
-				to: '/posts'
-			}
-		]
-	},
-
 	{
 		id: 'App Informations',
 		icon: 'iconsminds-monitor---phone',

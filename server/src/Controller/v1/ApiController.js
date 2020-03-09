@@ -122,11 +122,9 @@ class ApiController {
 			},
 			fields: [
 				'id',
-				'first_name',
-				'last_name',
+				'name',
 				'status',
 				'email',
-				'phone',
 				'cover_pic',
 				'about_us',
 				'profile',

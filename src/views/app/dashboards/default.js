@@ -9,8 +9,7 @@ import { NotificationManager } from '../../../components/common/react-notificati
 const DefaultDashboard = React.memo(() => {
 	const [ dashBoardData, setDashboardData ] = useState({
 		total_users: 0,
-		total_gifs: 0,
-		total_posts: 0
+		total_listern: 0,
 	});
 	useEffect(() => {
 		dashBoard()
@@ -39,7 +38,7 @@ const DefaultDashboard = React.memo(() => {
 			<Row>
 				<Colxx lg="12" md="12">
 					<Row>
-						<Colxx lg="4" xl="4" className="mb-4">
+						<Colxx lg="6" xl="6" className="mb-6">
 							<NavLink to="/users">
 								<GradientWithRadialProgressCard
 									icon="iconsminds-male"
@@ -48,24 +47,16 @@ const DefaultDashboard = React.memo(() => {
 								/>
 							</NavLink>
 						</Colxx>
-						<Colxx lg="4" xl="4" className="mb-4">
-							<NavLink to="/gifs">
+						<Colxx lg="6" xl="6" className="mb-6">
+							<NavLink to="/listener">
 								<GradientWithRadialProgressCard
 									icon="iconsminds-scooter"
-									title={`${dashBoardData.total_gifs} Gifs`}
+									title={`${dashBoardData.total_listern} Listener`}
 									detail={``}
 								/>
 							</NavLink>
 						</Colxx>
-						<Colxx lg="4" xl="4" className="mb-4">
-							<NavLink to="/posts">
-								<GradientWithRadialProgressCard
-									icon="iconsminds-shop-2"
-									title={`${dashBoardData.total_posts} Posts`}
-									detail=""
-								/>
-							</NavLink>
-						</Colxx>
+						
 					</Row>
 				</Colxx>
 			</Row>

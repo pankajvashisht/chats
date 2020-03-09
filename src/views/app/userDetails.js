@@ -11,21 +11,15 @@ const UserDetails = (props) => {
 			</Card>
 			<CardBody>
 				<div>
-					<b> First Name </b> : {userDetails.first_name}
+					<b>  Name </b> : {userDetails.name}
 				</div>
 				<hr />
-				<div>
-					<b> Last Name </b> : {userDetails.last_name}
-				</div>
-				<hr />
+				
+		
 				<div>
 					<b> Email </b> : {userDetails.email}
 				</div>
-				<hr />
-				<div>
-					<b> Phone </b> : {userDetails.phone_code}
-					{userDetails.phone}
-				</div>
+				
 			</CardBody>
 		</Fragment>
 	);

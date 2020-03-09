@@ -1,16 +1,16 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import ListPageHeading from '../../../containers/pages/ListPageHeading';
-import Pagination from '../../../containers/pages/Pagination';
-import { posts } from '../../../Apis/admin';
-import { NotificationManager } from '../../../components/common/react-notifications';
+import ListPageHeading from '../../containers/pages/ListPageHeading';
+import Pagination from '../../containers/pages/Pagination';
+import { listener } from '../../Apis/admin';
+import { NotificationManager } from '../../components/common/react-notifications';
 import { Card } from 'reactstrap';
 import { NavLink, Link } from 'react-router-dom';
 import classnames from 'classnames';
 import { ContextMenuTrigger } from 'react-contextmenu';
-import { Colxx } from '../../../components/common/CustomBootstrap';
-import StatusUpdate from '../../../components/UpdateStatus';
-import DeleteData from '../../../components/DeleteData';
-import { convertDate } from '../../../constants/defaultValues';
+import { Colxx } from '../../components/common/CustomBootstrap';
+import StatusUpdate from '../../components/UpdateStatus';
+import DeleteData from '../../components/DeleteData';
+import { convertDate } from '../../constants/defaultValues';
 const additional = {
 	currentPage: 1,
 	totalItemCount: 0,
@@ -18,7 +18,7 @@ const additional = {
 	search: '',
 	pageSizes: [ 10, 20, 50, 100 ]
 };
-const Post = React.memo((props) => {
+const Listener = React.memo((props) => {
 	const [ pageInfo, setPageInfo ] = useState(additional);
 	const [ totalPosts, setTotalPost ] = useState([]);
 	const [ isLoading, setIsLoading ] = useState(true);
@@ -27,7 +27,7 @@ const Post = React.memo((props) => {
 	const [ searchText, setSearchtext ] = useState(undefined);
 	useEffect(
 		() => {
-			posts(currentPage, selectedPageSize, searchText)
+			listener(currentPage, selectedPageSize, searchText)
 				.then((res) => {
 					const { data } = res;
 					const { result, pagination } = data.data;
@@ -48,7 +48,6 @@ const Post = React.memo((props) => {
 		},
 		[ selectedPageSize, currentPage, searchText ]
 	);
-	const onCheckItem = () => {};
 	const onSearchKey = (event) => {
 		setSearchtext(event.target.value);
 	};
@@ -59,7 +58,7 @@ const Post = React.memo((props) => {
 	const onChangePage = (value) => {
 		setCurrentPage(value);
 	};
-
+	const onCheckItem = (key, value) => {};
 	const DeleteDataLocal = (key) => {
 		totalPosts.splice(key, 1);
 		setTotalPost([ ...totalPosts ]);
@@ -76,7 +75,7 @@ const Post = React.memo((props) => {
 		<Fragment>
 			<ListPageHeading
 				match={props.match}
-				heading="Posts"
+				heading="Users"
 				changePageSize={changePageSize}
 				selectedPageSize={selectedPageSize}
 				totalItemCount={pageInfo.totalItemCount}
@@ -103,7 +102,7 @@ const Post = React.memo((props) => {
 								className="d-flex"
 							>
 								<img
-									alt={post.first_name}
+									alt={post.name}
 									src={post.profile}
 									className="list-thumbnail responsive border-0 card-img-left"
 								/>
@@ -118,7 +117,7 @@ const Post = React.memo((props) => {
 										className="w-40 w-sm-100"
 									>
 										<p className="list-item-heading mb-1 truncate">
-											{post.first_name} {post.last_name}
+											{post.name} 
 										</p>
 									</NavLink>
 									<NavLink
@@ -130,7 +129,6 @@ const Post = React.memo((props) => {
 									>
 										<p className="list-item-heading mb-1 truncate">{post.email}</p>
 									</NavLink>
-									<p className="mb-1 text-muted text-small w-15 w-sm-100">{post.phone}</p>
 									<p className="mb-1 text-muted text-small w-15 w-sm-100">
 										{convertDate(post.created)}
 									</p>
@@ -162,4 +160,4 @@ const Post = React.memo((props) => {
 	);
 });
 
-export default Post;
+export default Listener;
