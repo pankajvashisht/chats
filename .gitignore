@@ -2,3 +2,4 @@ node_modules
 build
 rou.sql
 server/public/upload
+.env
