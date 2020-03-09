@@ -2,6 +2,7 @@ const ApiController = require('./ApiController');
 const app = require('../../../libary/CommanMethod');
 const Db = require('../../../libary/sqlBulider');
 const ApiError = require('../../Exceptions/ApiError');
+const { lang } = require('../../../config');
 const DB = new Db();
 
 class ChatController extends ApiController {
@@ -9,10 +10,11 @@ class ChatController extends ApiController {
 		const required = {
 			friend_id: Request.body.friend_id,
 			user_id: Request.body.user_id,
-			message_type: Request.body.message_type, // 1-> text 2-> media
+			message_type: Request.body.message_type || 0, // 0-> text 1-> media
 			message: Request.body.message || ''
-		};
-		const requestData = await super.vaildation(required, {});
+    };
+    if (required.message_type !== '0') delete required.message;
+    const requestData = await super.vaildation(required, {});
 		const user_info = await DB.find('users', 'first', {
 			conditions: {
 				'users.id': requestData.friend_id
@@ -21,16 +23,20 @@ class ChatController extends ApiController {
 		});
 		if (!user_info) throw new ApiError(lang[Request.lang].userNotFound, 404);
 		const { user_id, friend_id } = requestData;
-		const query = `select * from threads where (user_id = ${user_id} and frined_id = ${friend_id} ) or (user_id = ${friend_id} and friend_id = ${user_id}) limit 1`;
+		const query = `select * from threads where (user_id = ${user_id} and friend_id = ${friend_id} ) or (user_id = ${friend_id} and friend_id = ${user_id}) limit 1`;
 		const threads = await DB.first(query);
 		if (threads.length > 0) {
 			requestData.thread_id = threads[0].id;
 		} else {
 			requestData.thread_id = await DB.save('threads', requestData);
+    }
+    if (!(Request.files && Request.files.message) && requestData.message_type > '0') throw new ApiError('message feild required', 400);
+    if (Request.files && Request.files.message) {
+			requestData.message = await app.upload_pic_with_await(Request.files.message);
 		}
-		requestData.sender_id = request_data.user_id;
-		requestData.receiver_id = request_data.friend_id;
-		requestData.id = await DB.save('chats', request_data);
+		requestData.sender_id = requestData.user_id;
+		requestData.receiver_id = requestData.friend_id;
+		requestData.id = await DB.save('chats', requestData);
 		const object = {
 			id: requestData.thread_id,
 			last_chat_id: requestData.id
@@ -39,9 +45,12 @@ class ChatController extends ApiController {
 		requestData.notification_code = 8;
 		if (user_info.profile.length > 0) {
 			user_info.profile = appURL + 'uploads/' + user_info.profile;
+    }
+    if (requestData.message_type !== '0') {
+			requestData.message = appURL + 'uploads/' + requestData.message;
 		}
 		requestData.user_info = user_info;
-		requestData.text = request_data.message;
+		requestData.text = requestData.message;
 		setTimeout(() => {
 			delete requestData.message_type;
 			const pushObject = {
@@ -54,7 +63,7 @@ class ChatController extends ApiController {
 
 		return {
 			message: lang[Request.lang].messageSend,
-			data: request_data
+			data: requestData
 		};
 	}
 
@@ -65,7 +74,7 @@ class ChatController extends ApiController {
 		};
 		const requestData = await super.vaildation(required, {});
 		const { user_id, friend_id } = requestData;
-		const thread = `select * from threads where (user_id = ${user_id} and frined_id = ${friend_id} ) or (user_id = ${friend_id} and friend_id = ${user_id}) limit 1`;
+		const thread = `select * from threads where (user_id = ${user_id} and friend_id = ${friend_id} ) or (user_id = ${friend_id} and friend_id = ${user_id}) limit 1`;
 		let id = 0;
 		const threadInfo = await DB.first(thread);
 		if (threadInfo.length > 0) {
@@ -78,10 +87,11 @@ class ChatController extends ApiController {
 		const query = `select chats.*, users.id as friend_id, users.profile, users.phone,users.email,users.last_name, users.first_name, users.cover_pic, users.about_us, users.user_type  from chats join users on (users.id = IF(chats.sender_id = 
 			${user_id},chats.receiver_id,chats.sender_id)) where ((sender_id = ${user_id} and receiver_id = ${friend_id})
 		  or (sender_id = ${friend_id} and receiver_id = ${user_id})) and chats.id > ${id} and (select count(id) as total from delete_chats where user_id =  ${user_id} and chat_id = chats.id) = 0 limit 100`;
-		const chats = await DB.first(query);
+    const chats = await DB.first(query);
+    const final = makeChatArray(chats);
 		return {
 			message: lang[Request.lang].messages,
-			data: app.addUrl(chats, [ 'profile', 'cover_pic' ])
+			data: final
 		};
 	}
 
@@ -92,7 +102,7 @@ class ChatController extends ApiController {
 		where (user_id = ${user_id} or  friend_id = ${user_id}) and chats.id > IF(threads.user_id = ${user_id}, threads.first_friend_deleted_id, threads.second_friend_deleted_id)  order by chats.id desc`;
 		return {
 			message: lang[Request.lang].lastChat,
-			data: app.addUrl(await DB.first(query), [ 'profile', 'cover_pic' ])
+			data: makeChatArray(await DB.first(query))
 		};
 	}
 
@@ -138,3 +148,37 @@ class ChatController extends ApiController {
 }
 
 module.exports = ChatController;
+
+const makeChatArray = (chats) => { 
+  return chats.map(value => {
+      const chats = {
+        id: value.id,
+        sender_id: value.sender_id,
+        receiver_id: value.receiver_id,
+        thread_id: value.thread_id,
+        message_type: value.message_type,
+        message: value.message,
+        is_read: value.is_read,
+        created: value.created,
+        modified: value.modified,
+        friendInfo : {
+          last_name: value.last_name,
+          first_name: value.first_name,
+          cover_pic: value.cover_pic,
+          about_us: value.about_us,
+          user_type: value.user_type,
+          profile: value.profile,
+          user_id: value.friend_id,
+          phone: value.phone,
+          email: value.email,
+      }
+      };
+      if (value.profile.length > 0) { 
+			  chats.friendInfo.profile = appURL + 'uploads/' + value.profile;
+      }
+      if (value.message_type !== 0) {
+        chats.message = appURL + 'uploads/' + value.message;
+      }
+      return chats
+    });
+};

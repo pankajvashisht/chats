@@ -13,7 +13,7 @@ const Apiresponse = (fn) => async (req, res) => {
 };
 
 const error = (res, err) => {
-  console.log("Errors is here");
+  console.log("Errors is here", err);
   try {
     let code =
       typeof err === 'object'
