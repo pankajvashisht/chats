@@ -19,6 +19,14 @@ const UserDetails = (props) => {
 				<div>
 					<b> Email </b> : {userDetails.email}
 				</div>
+				<hr />
+				<div>
+					<b> Description </b> : {userDetails.description}
+				</div>
+					<hr />
+				<div>
+					<b> View Doucment </b> : <a href={userDetails.document} target="_blank"><u>{userDetails.document}</u></a>
+				</div>
 				
 			</CardBody>
 		</Fragment>
