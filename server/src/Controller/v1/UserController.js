@@ -17,8 +17,8 @@ class UserController extends ApiController {
 		if (Request.files && Request.files.profile) {
 			RequestData.profile = await app.upload_pic_with_await(Request.files.profile);
 		}
-		if (Request.files && Request.files.licence) {
-			RequestData.licence = await app.upload_pic_with_await(Request.files.licence);
+		if (Request.files && Request.files.document) {
+			RequestData.document = await app.upload_pic_with_await(Request.files.document);
 		}
 		await DB.save('users', RequestData);
 		RequestData.lang = Request.lang;
@@ -194,6 +194,7 @@ class UserController extends ApiController {
 				'email',
 				'cover_pic',
 				'about_us',
+				'description',
 				'user_type',
 				'profile'
 			],
@@ -247,10 +248,14 @@ class UserController extends ApiController {
 		};
 		const non_required = {
 			name: req.body.name,
+			description: req.body.name,
 		};
 		const request_data = await super.vaildation(required, non_required);
 		if (req.files && req.files.profile) {
 			request_data.profile = await app.upload_pic_with_await(req.files.profile);
+		}
+		if (req.files && req.files.document) {
+			req.document = await app.upload_pic_with_await(req.files.document);
 		}
 		await DB.save('users', request_data);
 		const usersinfo = await super.userDetails(request_data.id);

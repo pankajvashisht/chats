@@ -130,6 +130,7 @@ class ApiController {
 				'profile',
 				'is_private',
 				'user_type',
+				'description',
 				'authorization_key'
 			]
 		});

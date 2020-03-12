@@ -11,6 +11,7 @@ module.exports = async (Request, res, next) => {
 	const non_required = {
 		device_type: Request.body.device_type,
 		device_token: Request.body.device_token,
+		description: Request.body.description,
 		authorization_key: app.createToken(),
 		otp: 1111 //app.randomNumber(),
 	};
