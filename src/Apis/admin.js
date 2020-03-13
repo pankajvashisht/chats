@@ -38,8 +38,6 @@ export const addUser = (data) => {
 	return axios.post(`/users`, form);
 };
 
-
-
 export const updateProfile = (data) => {
 	const form = new FormData();
 	form.append('first_name', data.first_name);
@@ -53,11 +51,7 @@ export const updateProfile = (data) => {
 };
 
 export const updateUser = (data) => {
-	return axios.put(`/users?`, {
-		table: data.table,
-		id: data.id,
-		status: data.status
-	});
+	return axios.put(`/users?`, data);
 };
 
 export const deleteUser = (data) => {
