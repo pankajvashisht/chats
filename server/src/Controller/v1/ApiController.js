@@ -132,6 +132,7 @@ class ApiController {
 				'user_type',
 				'description',
 				'document',
+				'doucment_request',
 				'authorization_key'
 			]
 		});
