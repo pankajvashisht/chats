@@ -102,7 +102,7 @@ const Users = React.memo((props) => {
 								className="d-flex"
 							>
 								<img
-									alt={post.first_name}
+									alt={post.name}
 									src={post.profile}
 									className="list-thumbnail responsive border-0 card-img-left"
 								/>
@@ -116,9 +116,7 @@ const Users = React.memo((props) => {
 										}}
 										className="w-40 w-sm-100"
 									>
-										<p className="list-item-heading mb-1 truncate">
-											{post.first_name} {post.last_name}
-										</p>
+										<p className="list-item-heading mb-1 truncate">{post.name}</p>
 									</NavLink>
 									<NavLink
 										to={{
