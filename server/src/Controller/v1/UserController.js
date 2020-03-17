@@ -202,7 +202,7 @@ class UserController extends ApiController {
 				'profile'
 			],
 			limit: [ offset, limit ],
-			orderBy: [ 'users.first_name asc' ]
+			orderBy: [ 'users.name asc' ]
 		};
 		if (parseInt(userType) === 1) { 
 			condition.conditions['user_type'] === 1;
