@@ -106,19 +106,19 @@ const vaildation = async (required, non_required = {}) => {
     if (required.hasOwnProperty('checkexist') && required.checkexist === 1) {
       if (required.hasOwnProperty('email')) {
         if (await checkingAvailability('email', required.email, 'users')) {
-          throw new ApiError('email already exits');
+          throw new ApiError('email already exists');
         }
       }
       if (required.hasOwnProperty('phone')) {
         if (await checkingAvailability('phone', required.phone, 'users')) {
-          throw new ApiError('phone already exits');
+          throw new ApiError('phone already exists');
         }
       }
       if (required.hasOwnProperty('username')) {
         if (
           await checkingAvailability('username', required.username, 'users')
         ) {
-          throw new ApiError('username already exits');
+          throw new ApiError('username already exists');
         }
       }
     }
