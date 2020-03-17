@@ -178,7 +178,7 @@ class UserController extends ApiController {
 		let offset = Request.params.offset || 1;
 		const limit = Request.query.limit || 10;
 		const search = Request.query.search || '';
-		const userType = Request.query.user_type || 0;
+		const userType = Request.query.user_type || Request.userInfo.body.doucment_request;
 		const verify = Request.query.verify || 2;
 		const page = parseInt(offset);
 		offset = (offset - 1) * limit;

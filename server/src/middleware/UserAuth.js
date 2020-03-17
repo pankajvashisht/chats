@@ -21,6 +21,7 @@ const UserAuth = async (req, res, next) => {
 				'email',
 				'profile',
 				'authorization_key',
+				'doucment_request',
 				'otp',
 				'password'
 			]
