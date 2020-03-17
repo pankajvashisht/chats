@@ -178,6 +178,8 @@ class UserController extends ApiController {
 		let offset = Request.params.offset || 1;
 		const limit = Request.query.limit || 10;
 		const search = Request.query.search || '';
+		const userType = Request.query.user_type || 0;
+		const verify = Request.query.verify || 2;
 		const page = parseInt(offset);
 		offset = (offset - 1) * limit;
 		const condition = {
@@ -196,11 +198,18 @@ class UserController extends ApiController {
 				'about_us',
 				'description',
 				'user_type',
+				'doucment_request',
 				'profile'
 			],
 			limit: [ offset, limit ],
 			orderBy: [ 'users.first_name asc' ]
 		};
+		if (parseInt(userType) === 1) { 
+			condition.conditions['user_type'] === 1;
+		}
+		if (parseInt(verify) !== 2) { 
+			condition.conditions['doucment_request'] === verify;
+		}
 		if (search) {
 			condition.conditions['like'] = {
 				name: search,
