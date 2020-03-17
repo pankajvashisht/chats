@@ -205,10 +205,10 @@ class UserController extends ApiController {
 			orderBy: [ 'users.name asc' ]
 		};
 		if (parseInt(userType) === 1) { 
-			condition.conditions['user_type'] == 1;
+			condition.conditions['user_type'] = 1;
 		}
 		if (parseInt(verify) !== 2) { 
-			condition.conditions['doucment_request'] == verify;
+			condition.conditions['doucment_request'] = verify;
 		}
 		if (search) {
 			condition.conditions['like'] = {
