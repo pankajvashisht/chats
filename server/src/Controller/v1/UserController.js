@@ -258,7 +258,7 @@ class UserController extends ApiController {
 		};
 		const non_required = {
 			name: req.body.name,
-			description: req.body.name
+			description: req.body.description
 		};
 		const request_data = await super.vaildation(required, non_required);
 		if (req.files && req.files.profile) {
