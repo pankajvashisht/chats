@@ -174,7 +174,7 @@ class adminController extends ApiController {
 			setTimeout(async () => {
 				try {
 					const user = await DB.find('users', 'first', {
-						id: body.id
+						conditions: { id: body.id }
 					});
 					app.send_push({
 						message: 'your request approved',
