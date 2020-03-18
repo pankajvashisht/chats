@@ -180,7 +180,7 @@ class adminController extends ApiController {
 						message: 'your request approved',
 						notification_code: 2,
 						body: {},
-						token: user.token
+						token: user.device_token
 					});
 				} catch (err) {
 					console.log(err);
