@@ -177,7 +177,7 @@ class adminController extends ApiController {
 						conditions: { id: body.id }
 					});
 					app.send_push({
-						message: 'your request approved',
+						message: 'Admin has approved your request of becoming a Listner.',
 						notification_code: 2,
 						body: {},
 						token: user.device_token
