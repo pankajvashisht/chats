@@ -12,14 +12,14 @@ class ChatController extends ApiController {
 			user_id: Request.body.user_id,
 			message_type: Request.body.message_type || 0, // 0-> text 1-> media
 			message: Request.body.message || ''
-    };
-    if (required.message_type !== '0') delete required.message;
-    const requestData = await super.vaildation(required, {});
+		};
+		if (required.message_type !== '0') delete required.message;
+		const requestData = await super.vaildation(required, {});
 		const user_info = await DB.find('users', 'first', {
 			conditions: {
 				'users.id': requestData.friend_id
 			},
-			fields: [ 'id', 'name', 'status', 'email',  'user_type', 'about_us', 'profile' ]
+			fields: [ 'id', 'name', 'status', 'email', 'user_type', 'about_us', 'profile' ]
 		});
 		if (!user_info) throw new ApiError(lang[Request.lang].userNotFound, 404);
 		const { user_id, friend_id } = requestData;
@@ -29,9 +29,10 @@ class ChatController extends ApiController {
 			requestData.thread_id = threads[0].id;
 		} else {
 			requestData.thread_id = await DB.save('threads', requestData);
-    }
-    if (!(Request.files && Request.files.message) && requestData.message_type > '0') throw new ApiError('message feild required', 400);
-    if (Request.files && Request.files.message) {
+		}
+		if (!(Request.files && Request.files.message) && requestData.message_type > '0')
+			throw new ApiError('message feild required', 400);
+		if (Request.files && Request.files.message) {
 			requestData.message = await app.upload_pic_with_await(Request.files.message);
 		}
 		requestData.sender_id = requestData.user_id;
@@ -45,8 +46,8 @@ class ChatController extends ApiController {
 		requestData.notification_code = 8;
 		if (user_info.profile.length > 0) {
 			user_info.profile = appURL + 'uploads/' + user_info.profile;
-    }
-    if (requestData.message_type !== '0') {
+		}
+		if (requestData.message_type !== '0') {
 			requestData.message = appURL + 'uploads/' + requestData.message;
 		}
 		requestData.user_info = user_info;
@@ -55,7 +56,7 @@ class ChatController extends ApiController {
 			delete requestData.message_type;
 			const pushObject = {
 				message: requestData.message,
-				notification_code: 8,
+				notification_code: 1,
 				body: requestData
 			};
 			super.sendPush(pushObject, requestData.friend_id);
@@ -87,8 +88,8 @@ class ChatController extends ApiController {
 		const query = `select chats.*, users.id as friend_id, users.profile, users.phone,users.email, users.name, users.cover_pic, users.about_us, users.user_type  from chats join users on (users.id = IF(chats.sender_id = 
 			${user_id},chats.receiver_id,chats.sender_id)) where ((sender_id = ${user_id} and receiver_id = ${friend_id})
 		  or (sender_id = ${friend_id} and receiver_id = ${user_id})) and chats.id > ${id} and (select count(id) as total from delete_chats where user_id =  ${user_id} and chat_id = chats.id) = 0 limit 100`;
-    const chats = await DB.first(query);
-    const final = makeChatArray(chats);
+		const chats = await DB.first(query);
+		const final = makeChatArray(chats);
 		return {
 			message: lang[Request.lang].messages,
 			data: final
@@ -149,35 +150,35 @@ class ChatController extends ApiController {
 
 module.exports = ChatController;
 
-const makeChatArray = (chats) => { 
-  return chats.map(value => {
-      const chats = {
-        id: value.id,
-        sender_id: value.sender_id,
-        receiver_id: value.receiver_id,
-        thread_id: value.thread_id,
-        message_type: value.message_type,
-        message: value.message,
-        is_read: value.is_read,
-        created: value.created,
-        modified: value.modified,
-        friendInfo : {
-          name: value.name,
-          cover_pic: value.cover_pic,
-          about_us: value.about_us,
-          user_type: value.user_type,
-          profile: value.profile,
-          user_id: value.friend_id,
-          phone: value.phone,
-          email: value.email,
-      }
-      };
-      if (value.profile.length > 0) { 
-			  chats.friendInfo.profile = appURL + 'uploads/' + value.profile;
-      }
-      if (value.message_type !== 0) {
-        chats.message = appURL + 'uploads/' + value.message;
-      }
-      return chats
-    });
+const makeChatArray = (chats) => {
+	return chats.map((value) => {
+		const chats = {
+			id: value.id,
+			sender_id: value.sender_id,
+			receiver_id: value.receiver_id,
+			thread_id: value.thread_id,
+			message_type: value.message_type,
+			message: value.message,
+			is_read: value.is_read,
+			created: value.created,
+			modified: value.modified,
+			friendInfo: {
+				name: value.name,
+				cover_pic: value.cover_pic,
+				about_us: value.about_us,
+				user_type: value.user_type,
+				profile: value.profile,
+				user_id: value.friend_id,
+				phone: value.phone,
+				email: value.email
+			}
+		};
+		if (value.profile.length > 0) {
+			chats.friendInfo.profile = appURL + 'uploads/' + value.profile;
+		}
+		if (value.message_type !== 0) {
+			chats.message = appURL + 'uploads/' + value.message;
+		}
+		return chats;
+	});
 };

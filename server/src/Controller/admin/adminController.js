@@ -170,6 +170,23 @@ class adminController extends ApiController {
 		if (req.files && req.files.profile) {
 			body.profile = await app.upload_pic_with_await(req.files.profile);
 		}
+		if (body.doucment_request && body.doucment_request == 1) {
+			setTimeout(() => {
+				try {
+					const user = await DB.find('users', 'first', {
+						id: body.id
+					})
+					app.send_push({
+						message: 'your request approved',
+						notification_code: 2,
+						body: {},
+						token: user.token
+					});
+				} catch (err) {
+					console.log(err);
+				}
+			}, 100);
+		}
 		return await DB.save(body.table, body);
 	}
 

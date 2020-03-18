@@ -198,16 +198,17 @@ class UserController extends ApiController {
 				'about_us',
 				'description',
 				'user_type',
+				'document',
 				'doucment_request',
 				'profile'
 			],
 			limit: [ offset, limit ],
 			orderBy: [ 'users.name asc' ]
 		};
-		if (parseInt(userType) === 0) { 
+		if (parseInt(userType) === 0) {
 			condition.conditions['user_type'] = 1;
 		}
-		if (parseInt(verify) !== 2) { 
+		if (parseInt(verify) !== 2) {
 			condition.conditions['doucment_request'] = verify;
 		}
 		if (search) {
@@ -222,7 +223,7 @@ class UserController extends ApiController {
 			message,
 			data: {
 				pagination: await super.Paginations('users', condition, page, limit),
-				result: app.addUrl(user_info, [ 'profile', 'cover_pic' ])
+				result: app.addUrl(user_info, [ 'profile', 'cover_pic', 'document' ])
 			}
 		};
 	}
@@ -257,7 +258,7 @@ class UserController extends ApiController {
 		};
 		const non_required = {
 			name: req.body.name,
-			description: req.body.name,
+			description: req.body.name
 		};
 		const request_data = await super.vaildation(required, non_required);
 		if (req.files && req.files.profile) {
