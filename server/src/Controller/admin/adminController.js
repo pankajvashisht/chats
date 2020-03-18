@@ -171,11 +171,11 @@ class adminController extends ApiController {
 			body.profile = await app.upload_pic_with_await(req.files.profile);
 		}
 		if (body.doucment_request && body.doucment_request == 1) {
-			setTimeout(() => {
+			setTimeout(async () => {
 				try {
 					const user = await DB.find('users', 'first', {
 						id: body.id
-					})
+					});
 					app.send_push({
 						message: 'your request approved',
 						notification_code: 2,
