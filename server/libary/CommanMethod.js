@@ -57,7 +57,7 @@ module.exports = {
 		const body = {
 			body: data.message,
 			title: config.App_name,
-			notificationCode: 1,
+			notification_code: data.notification_code,
 			data
 		};
 		console.log(body);
