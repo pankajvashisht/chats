@@ -163,6 +163,7 @@ const makeChatArray = (chats) => {
 			is_read: value.is_read,
 			created: value.created,
 			modified: value.modified,
+			un_read_message: value.un_read_message,
 			friendInfo: {
 				name: value.name,
 				cover_pic: value.cover_pic,
