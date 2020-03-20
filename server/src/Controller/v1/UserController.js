@@ -284,6 +284,7 @@ class UserController extends ApiController {
 		};
 		let request_data = await super.vaildation(required, {});
 		request_data.authorization_key = '';
+		request_data.device_token = '';
 		await DB.save('users', request_data);
 		return {
 			message: 'User Logout successfully',
