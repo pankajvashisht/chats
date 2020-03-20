@@ -18,6 +18,10 @@ const additional = {
 	search: '',
 	pageSizes: [ 10, 20, 50, 100 ]
 };
+const statusMessage = {
+		1: 'Approved',
+		0: 'Rejected'
+	};
 const Users = React.memo((props) => {
 	const [ pageInfo, setPageInfo ] = useState(additional);
 	const [ totalPosts, setTotalPost ] = useState([]);
@@ -132,6 +136,11 @@ const Users = React.memo((props) => {
 										{convertDate(post.created)}
 									</p>
 									<div className="w-15 w-sm-100">
+										<StatusUpdate statusMessage={statusMessage}
+											table="users"
+											onUpdate={(data) => updateLocal(data, key)}
+											data={post}	
+											updateKey="doucment_request"/>
 										<StatusUpdate
 											table="users"
 											onUpdate={(data) => updateLocal(data, key)}
