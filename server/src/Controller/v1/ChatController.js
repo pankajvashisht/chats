@@ -85,7 +85,7 @@ class ChatController extends ApiController {
 				id = threadInfo[0].second_friend_deleted_id;
 			}
 		}
-		DB.first(`update chats is_read = 1 where receiver_id= ${user_id} and sender_id = ${friend_id}`);
+		DB.first(`update chats set is_read = 1 where receiver_id= ${user_id} and sender_id = ${friend_id}`);
 		const query = `select chats.*, users.id as friend_id, users.profile, users.phone,users.email, users.name, users.cover_pic, users.about_us, users.user_type  from chats join users on (users.id = IF(chats.sender_id = 
 			${user_id},chats.receiver_id,chats.sender_id)) where ((sender_id = ${user_id} and receiver_id = ${friend_id})
 		  or (sender_id = ${friend_id} and receiver_id = ${user_id})) and chats.id > ${id} and (select count(id) as total from delete_chats where user_id =  ${user_id} and chat_id = chats.id) = 0 limit 100`;
