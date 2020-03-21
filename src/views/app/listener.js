@@ -3,11 +3,6 @@ import ListPageHeading from '../../containers/pages/ListPageHeading';
 import Pagination from '../../containers/pages/Pagination';
 import { listener } from '../../Apis/admin';
 import { NotificationManager } from '../../components/common/react-notifications';
-import { Card } from 'reactstrap';
-import { NavLink, Link } from 'react-router-dom';
-import classnames from 'classnames';
-import { ContextMenuTrigger } from 'react-contextmenu';
-import { Colxx } from '../../components/common/CustomBootstrap';
 import StatusUpdate from '../../components/UpdateStatus';
 import DeleteData from '../../components/DeleteData';
 import { convertDate } from '../../constants/defaultValues';
@@ -18,6 +13,10 @@ const additional = {
 	search: '',
 	pageSizes: [ 10, 20, 50, 100 ]
 };
+const statusMessage = {
+		1: 'Verify',
+		0: 'Not Verify'
+	};
 const Listener = React.memo((props) => {
 	const [ pageInfo, setPageInfo ] = useState(additional);
 	const [ totalPosts, setTotalPost ] = useState([]);
