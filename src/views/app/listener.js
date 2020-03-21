@@ -85,72 +85,66 @@ const Listener = React.memo((props) => {
 				orderOptions={pageInfo.orderOptions}
 				pageSizes={pageInfo.pageSizes}
 			/>
-			{totalPosts.map((post, key) => (
-				<Colxx xxs="12" key={post.id} className="mb-3">
-					<ContextMenuTrigger id="menu_id" data={post.id}>
-						<Card
-							onClick={(event) => onCheckItem(event, post.id)}
-							className={classnames('d-flex flex-row', {
-								active: 'active'
-							})}
-						>
-							<Link
+			<table className="table table-striped">
+						 <thead>
+						<tr>
+							<th>#</th>
+							<th>Namem</th>
+							<th>Email</th>
+							<th>Status</th>
+							<th>Verify Badge</th>
+							<th>Created Date</th>
+							<th>Action</th>
+							</tr>
+    					 </thead>
+				 <tbody>
+						{totalPosts.map((post, key) => (
+							<>
+						<tr>
+							<td>{key+1}</td>
+									<td>
+										<Link
 								to={{
 									pathname: '/user-details',
 									state: { post }
 								}}
 								className="d-flex"
-							>
-								<img
+							><img
 									alt={post.name}
 									src={post.profile}
 									className="list-thumbnail responsive border-0 card-img-left"
-								/>
-							</Link>
-							<div className="pl-2 d-flex flex-grow-1 min-width-zero">
-								<div className="card-body align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero align-items-lg-center">
-									<NavLink
-										to={{
-											pathname: '/user-details',
-											state: { post }
-										}}
-										className="w-40 w-sm-100"
-									>
-										<p className="list-item-heading mb-1 truncate">
-											{post.name} 
-										</p>
-									</NavLink>
-									<NavLink
-										to={{
-											pathname: '/user-details',
-											state: { post }
-										}}
-										className="w-40 w-sm-100"
-									>
-										<p className="list-item-heading mb-1 truncate">{post.email}</p>
-									</NavLink>
-									<p className="mb-1 text-muted text-small w-15 w-sm-100">
-										{convertDate(post.created)}
-									</p>
-									<div className="w-15 w-sm-100">
+											/>&nbsp;&nbsp;&nbsp;{post.name}
+											</Link>
+							</td>
+							<td>{post.email}</td>
+									<td>
 										<StatusUpdate
 											table="users"
 											onUpdate={(data) => updateLocal(data, key)}
 											data={post}
 										/>
-									</div>
-								</div>
-								<div className="custom-control custom-checkbox pl-1 align-self-center pr-4">
-									<DeleteData table="users" data={post.id} ondelete={() => DeleteDataLocal(key)}>
+							</td>
+							<td>
+								<StatusUpdate statusMessage={statusMessage}
+											table="users"
+											onUpdate={(data) => updateLocal(data, key)}
+											data={post}	
+											updateKey="doucment_request"/>	
+							</td>
+							<td>
+								{convertDate(post.created)}
+							</td>
+							<td>
+								<DeleteData table="users" data={post.id} ondelete={() => DeleteDataLocal(key)}>
 										Delete
 									</DeleteData>
-								</div>
-							</div>
-						</Card>
-					</ContextMenuTrigger>
-				</Colxx>
+							</td>
+						</tr>
+				
+								</>
 			))}
-
+						</tbody>
+		</table>
 			<Pagination
 				currentPage={currentPage}
 				totalPage={pageInfo.totalPage}
