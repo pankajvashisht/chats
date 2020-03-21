@@ -89,10 +89,9 @@ const Users = React.memo((props) => {
 						 <thead>
 						<tr>
 							<th>#</th>
-							<th>Namem</th>
+							<th>Name</th>
 							<th>Email</th>
 							<th>Status</th>
-							<th>Verify Badge</th>
 							<th>Created Date</th>
 							<th>Action</th>
 							</tr>
@@ -123,13 +122,6 @@ const Users = React.memo((props) => {
 											onUpdate={(data) => updateLocal(data, key)}
 											data={post}
 										/>
-							</td>
-							<td>
-								<StatusUpdate statusMessage={statusMessage}
-											table="users"
-											onUpdate={(data) => updateLocal(data, key)}
-											data={post}	
-											updateKey="doucment_request"/>	
 							</td>
 							<td>
 								{convertDate(post.created)}

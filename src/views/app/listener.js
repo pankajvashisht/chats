@@ -89,10 +89,10 @@ const Listener = React.memo((props) => {
 						 <thead>
 						<tr>
 							<th>#</th>
-							<th>Namem</th>
+							<th>Name</th>
 							<th>Email</th>
 							<th>Status</th>
-							<th>Verify Badge</th>
+							<th>Verify Listener</th>
 							<th>Created Date</th>
 							<th>Action</th>
 							</tr>
