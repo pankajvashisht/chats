@@ -75,7 +75,7 @@ const Listener = React.memo((props) => {
 		<Fragment>
 			<ListPageHeading
 				match={props.match}
-				heading="Users"
+				heading="Listner"
 				changePageSize={changePageSize}
 				selectedPageSize={selectedPageSize}
 				totalItemCount={pageInfo.totalItemCount}
