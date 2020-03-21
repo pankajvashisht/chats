@@ -50,7 +50,8 @@ class ChatController extends ApiController {
 		if (requestData.message_type !== '0') {
 			requestData.message = appURL + 'uploads/' + requestData.message;
 		}
-		requestData.user_info = user_info;
+		const { userInfo } = Request.body;
+		requestData.user_info = userInfo;
 		requestData.text = requestData.message;
 		setTimeout(() => {
 			delete requestData.message_type;
