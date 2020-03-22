@@ -87,6 +87,7 @@ class adminController extends ApiController {
 			}
 		}
 		delete body.profile;
+		body.password = app.createHash(body.password);
 		if (Request.files && Request.files.profile) {
 			body.profile = await app.upload_pic_with_await(Request.files.profile);
 		}
