@@ -106,10 +106,20 @@ const AddListener = React.memo(() => {
 											<Label for="examplePasswordGrid">Profile</Label>
 											<Input
 												type="file"
-												required={true}
 												onChange={({ target }) => handleInput('profile', target.files[0])}
 												name="profile"
 												placeholder=""
+											/>
+										</FormGroup>
+									</Colxx>
+									<Colxx sm={12}>
+										<FormGroup>
+											<Label for="examplePasswordGrid">Description</Label>
+											<Input
+												type="teaxtarea"
+												onChange={({ target: { value } }) => handleInput('description', value)}
+												name="description"
+												placeholder="Description"
 											/>
 										</FormGroup>
 									</Colxx>

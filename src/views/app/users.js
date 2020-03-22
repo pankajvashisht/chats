@@ -90,6 +90,7 @@ const Users = React.memo((props) => {
 						<tr>
 							<th>#</th>
 							<th>Name</th>
+							<th>Profile</th>
 							<th>Email</th>
 							<th>Status</th>
 							<th>Created Date</th>
@@ -103,18 +104,30 @@ const Users = React.memo((props) => {
 							<td>{key+1}</td>
 									<td>
 										<Link
-								to={{
-									pathname: '/user-details',
-									state: { post }
-								}}
-								className="d-flex"
-							><img
-									alt={post.name}
-									src={post.profile}
-									className="list-thumbnail responsive border-0 card-img-left"
-											/>&nbsp;&nbsp;&nbsp;{post.name}
+										to={{
+											pathname: '/user-details',
+											state: { post }
+										}}
+											className="d-flex"
+										>	{post.name}
 											</Link>
-							</td>
+									</td>
+									<td>
+											<Link
+												to={{
+													pathname: '/user-details',
+													state: { post }
+												}}
+													className="d-flex"
+										>
+											<img
+												alt={post.name}
+												src={post.profile}
+												className="list-thumbnail responsive border-0 card-img-left"
+											/>
+											</Link>
+										
+										</td>
 							<td>{post.email}</td>
 									<td>
 										<StatusUpdate

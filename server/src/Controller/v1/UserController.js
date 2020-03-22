@@ -151,7 +151,8 @@ class UserController extends ApiController {
 		let request_data = await super.vaildation(required, non_required);
 		let login_details = await DB.find('users', 'first', {
 			conditions: {
-				email: request_data.email
+				email: request_data.email,
+				status: 1,
 			},
 			fields: [ 'id', 'password', 'status', 'email' ]
 		});
@@ -229,10 +230,16 @@ class UserController extends ApiController {
 	}
 
 	async appInfo() {
-		let app_info = await DB.find('app_informations', 'all');
+		const app_info = await DB.find('app_informations', 'all');
 		return {
 			message: 'App Informations',
 			data: app_info
+		};
+	}
+	documentInfo(Request) { 
+		return {
+			message: 'Document status',
+			data: Request.body.userInfo.doucment_request
 		};
 	}
 	async changePassword(req) {

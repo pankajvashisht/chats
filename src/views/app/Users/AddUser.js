@@ -106,7 +106,6 @@ const AddUser = React.memo(() => {
 											<Label for="examplePasswordGrid">Profile</Label>
 											<Input
 												type="file"
-												required={true}
 												onChange={({ target }) => handleInput('profile', target.files[0])}
 												name="profile"
 												placeholder=""

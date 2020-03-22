@@ -17,9 +17,10 @@ class ChatController extends ApiController {
 		const requestData = await super.vaildation(required, {});
 		const user_info = await DB.find('users', 'first', {
 			conditions: {
-				'users.id': requestData.friend_id
+				'users.id': requestData.friend_id,
+				status: 1
 			},
-			fields: [ 'id', 'name', 'status', 'email', 'user_type', 'about_us', 'profile' ]
+			fields: [ 'id', 'name', 'status', 'email', 'user_type', 'about_us', 'profile', 'status' ]
 		});
 		if (!user_info) throw new ApiError(lang[Request.lang].userNotFound, 404);
 		const { user_id, friend_id } = requestData;
