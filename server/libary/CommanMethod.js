@@ -47,7 +47,7 @@ module.exports = {
 				return timestamp + '.' + extension;
 			}
 		} catch (err) {
-			throw { code: 415, message: err };
+			throw { code: 415, message: JSON.stringify(err) };
 		}
 	},
 	send_push: function(data) {

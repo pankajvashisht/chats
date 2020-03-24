@@ -27,6 +27,14 @@ const UserDetails = (props) => {
 				<div>
 					<b> Description </b> : {userDetails.description}
 				</div>
+				{userDetails.profile && (
+					<>
+						<hr />
+						<div>
+						<b> Profile </b> : <img className="img-doc" height="50" width="50" src={userDetails.profile} alt="check" />
+						</div>
+					</>
+				)}
 				<hr />
 				{userDetails.document && (
 					<>
