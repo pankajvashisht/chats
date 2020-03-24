@@ -33,6 +33,8 @@ export const addUser = (data) => {
 	form.append('email', data.email);
 	form.append('password', data.password);
 	form.append('profile', data.profile);
+	form.append('profile', data.profile);
+	form.append('description', data.description);
 	form.append('status', 1);
 	form.append('user_type', data.user_type);
 	return axios.post(`/users`, form);
