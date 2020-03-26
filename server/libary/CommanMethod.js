@@ -13,6 +13,8 @@
 const { config, mails, SMS } = require('../config');
 const fs = require('fs');
 const crypto = require('crypto');
+const https = require('https');
+const url = require('url');
 
 module.exports = {
 	send_mail: function(object) {
@@ -51,24 +53,39 @@ module.exports = {
 		}
 	},
 	send_push: function(data) {
-		const { FCM } = require('push-notification-node');
+		//const { FCM } = require('push-notification-node');
 		const GOOGLE_KEY = config.GOOGLE_KEY; //put your server key here
-		const fcm = new FCM(GOOGLE_KEY);
-		const body = {
-			body: data.message,
-			title: config.App_name,
-			notification_code: data.notification_code,
+		const headers = {
+				Authorization: `key=${GOOGLE_KEY}`,
+				'Content-Type': 'application/json'
+		};
+		const pushObject = {
+			registration_ids: [data.token],
 			data
 		};
-		console.log(body);
-		fcm
-			.sendPromise(data.token, body)
-			.then((res) => {
-				console.log(res);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
+		POST('https://fcm.googleapis.com/fcm/send', JSON.stringify(pushObject), headers)
+				.then((res) => {
+					console.log(res);
+				})
+				.catch((err) => {
+					console.log(err);
+		});
+		// const fcm = new FCM(GOOGLE_KEY);
+		// const body = {
+		// 	body: data.message,
+		// 	title: config.App_name,
+		// 	notification_code: data.notification_code,
+		// 	data
+		// };
+		// console.log(body);
+		// fcm
+		// 	.sendPromise(data.token, body)
+		// 	.then((res) => {
+		// 		console.log(res);
+		// 	})
+		// 	.catch((err) => {
+		// 		console.log(err);
+		// 	});
 	},
 	send_push_apn: function() {},
 	paypal: async function() {},
@@ -172,3 +189,31 @@ module.exports = {
 		return Math.round(new Date().getTime() / 1000, 0);
 	}
 };
+
+function POST(apiUrl, data, headers) {
+  return new Promise((resolve, reject) => {
+    const host = url.parse(apiUrl).hostname;
+    const path = url.parse(apiUrl).pathname;
+    const options = {
+      host,
+      path,
+      method: 'post',
+      headers,
+    };
+    const request = https.request(options, function(res) {
+      res.setEncoding('utf-8');
+      let responseString = '';
+      res.on('data', function(data) {
+        responseString += data;
+      });
+      request.on('error', function(error) {
+        reject(error);
+      });
+      res.on('end', function() {
+        resolve(responseString);
+      });
+    });
+    request.write(data);
+    request.end();
+  });
+}
