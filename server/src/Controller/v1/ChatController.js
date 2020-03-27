@@ -44,7 +44,6 @@ class ChatController extends ApiController {
 			last_chat_id: requestData.id
 		};
 		DB.save('threads', object);
-		requestData.notification_code = 8;
 		if (user_info.profile.length > 0) {
 			user_info.profile = appURL + 'uploads/' + user_info.profile;
 		}
@@ -55,10 +54,9 @@ class ChatController extends ApiController {
 		requestData.user_info = userInfo;
 		requestData.text = requestData.message;
 		setTimeout(() => {
-			delete requestData.message_type;
 			const pushObject = {
 				message: requestData.message,
-				notification_code: 1,
+				notification_code: 8,
 				body: requestData
 			};
 			super.sendPush(pushObject, requestData.friend_id);
