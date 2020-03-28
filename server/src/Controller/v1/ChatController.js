@@ -111,7 +111,7 @@ class ChatController extends ApiController {
 	async readMessage(Request) {
 		const user_id = Request.body.user_id;
 		const chat_id = Request.params.chat_id;
-		const query = await DB.first(`update chats set is_read = 1 where receiver_id = ${user_id} and id=${chat_id}`);
+		await DB.first(`update chats set is_read = 1 where receiver_id = ${user_id} and id=${chat_id}`);
 		return {
 			message: 'Message read successfully',
 			data: []
