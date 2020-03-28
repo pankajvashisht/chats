@@ -26,5 +26,6 @@ router.get('/last-chat', Apiresponse(Chat.lastChat));
 router.delete('/delete-thread', Apiresponse(Chat.deleteChat));
 router.delete('/delete-message', Apiresponse(Chat.deletesingleMessage));
 router.get('/document-status', Apiresponse(user.documentInfo));
+router.patch('/read-message/:chat_id([0-9]+)', Apiresponse(Chat.readMessage));
 
 module.exports = router;
