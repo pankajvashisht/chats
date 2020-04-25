@@ -11,16 +11,27 @@ class ChatController extends ApiController {
 			friend_id: Request.body.friend_id,
 			user_id: Request.body.user_id,
 			message_type: Request.body.message_type || 0, // 0-> text 1-> media
-			message: Request.body.message || ''
+			message: Request.body.message || '',
 		};
 		if (required.message_type !== '0') delete required.message;
-		const requestData = await super.vaildation(required, {});
+		const requestData = await super.vaildation(required, {
+			voice_length: Request.body.message_type || 0,
+		});
 		const user_info = await DB.find('users', 'first', {
 			conditions: {
 				'users.id': requestData.friend_id,
-				status: 1
+				status: 1,
 			},
-			fields: [ 'id', 'name', 'status', 'email', 'user_type', 'about_us', 'profile', 'status' ]
+			fields: [
+				'id',
+				'name',
+				'status',
+				'email',
+				'user_type',
+				'about_us',
+				'profile',
+				'status',
+			],
 		});
 		if (!user_info) throw new ApiError(lang[Request.lang].userNotFound, 404);
 		const { user_id, friend_id } = requestData;
@@ -31,17 +42,22 @@ class ChatController extends ApiController {
 		} else {
 			requestData.thread_id = await DB.save('threads', requestData);
 		}
-		if (!(Request.files && Request.files.message) && requestData.message_type > '0')
+		if (
+			!(Request.files && Request.files.message) &&
+			requestData.message_type > '0'
+		)
 			throw new ApiError('message feild required', 400);
 		if (Request.files && Request.files.message) {
-			requestData.message = await app.upload_pic_with_await(Request.files.message);
+			requestData.message = await app.upload_pic_with_await(
+				Request.files.message
+			);
 		}
 		requestData.sender_id = requestData.user_id;
 		requestData.receiver_id = requestData.friend_id;
 		requestData.id = await DB.save('chats', requestData);
 		const object = {
 			id: requestData.thread_id,
-			last_chat_id: requestData.id
+			last_chat_id: requestData.id,
 		};
 		DB.save('threads', object);
 		if (user_info.profile.length > 0) {
@@ -57,21 +73,21 @@ class ChatController extends ApiController {
 			const pushObject = {
 				message: requestData.message,
 				notification_code: 8,
-				body: requestData
+				body: requestData,
 			};
 			super.sendPush(pushObject, requestData.friend_id);
 		}, 100);
 
 		return {
 			message: lang[Request.lang].messageSend,
-			data: requestData
+			data: requestData,
 		};
 	}
 
 	async getMessage(Request) {
 		const required = {
 			friend_id: Request.query.friend_id,
-			user_id: Request.body.user_id
+			user_id: Request.body.user_id,
 		};
 		const requestData = await super.vaildation(required, {});
 		const { user_id, friend_id } = requestData;
@@ -85,7 +101,9 @@ class ChatController extends ApiController {
 				id = threadInfo[0].second_friend_deleted_id;
 			}
 		}
-		DB.first(`update chats set is_read = 1 where receiver_id= ${user_id} and sender_id = ${friend_id}`);
+		DB.first(
+			`update chats set is_read = 1 where receiver_id= ${user_id} and sender_id = ${friend_id}`
+		);
 		const query = `select chats.*, users.id as friend_id, users.profile, users.phone,users.email, users.name, users.cover_pic, users.about_us, users.user_type  from chats join users on (users.id = IF(chats.sender_id = 
 			${user_id},chats.receiver_id,chats.sender_id)) where ((sender_id = ${user_id} and receiver_id = ${friend_id})
 		  or (sender_id = ${friend_id} and receiver_id = ${user_id})) and chats.id > ${id} and (select count(id) as total from delete_chats where user_id =  ${user_id} and chat_id = chats.id) = 0 limit 100`;
@@ -93,7 +111,7 @@ class ChatController extends ApiController {
 		const final = makeChatArray(chats);
 		return {
 			message: lang[Request.lang].messages,
-			data: final
+			data: final,
 		};
 	}
 
@@ -104,37 +122,39 @@ class ChatController extends ApiController {
 		where (user_id = ${user_id} or  friend_id = ${user_id}) and chats.id > IF(threads.user_id = ${user_id}, threads.first_friend_deleted_id, threads.second_friend_deleted_id)  order by chats.id desc`;
 		return {
 			message: lang[Request.lang].lastChat,
-			data: makeChatArray(await DB.first(query))
+			data: makeChatArray(await DB.first(query)),
 		};
 	}
 
 	async readMessage(Request) {
 		const user_id = Request.body.user_id;
 		const chat_id = Request.params.chat_id;
-		await DB.first(`update chats set is_read = 1 where receiver_id = ${user_id} and id=${chat_id}`);
+		await DB.first(
+			`update chats set is_read = 1 where receiver_id = ${user_id} and id=${chat_id}`
+		);
 		return {
 			message: 'Message read successfully',
-			data: []
+			data: [],
 		};
 	}
 
 	async deletesingleMessage(req) {
 		const required = {
 			user_id: req.body.user_id,
-			chat_id: req.body.chat_id
+			chat_id: req.body.chat_id,
 		};
 		const request_data = await super.vaildation(required, {});
 		await DB.save('delete_chats', request_data);
 		return {
 			message: lang[req.lang].chatDelete,
-			data: []
+			data: [],
 		};
 	}
 
 	async deleteChat(Request) {
 		const required = {
 			user_id: Request.body.user_id,
-			thread_id: Request.body.thread_id
+			thread_id: Request.body.thread_id,
 		};
 		const request_data = await super.vaildation(required, {});
 		let query = 'select * from threads where id = ' + request_data.thread_id;
@@ -154,7 +174,7 @@ class ChatController extends ApiController {
 		}
 		return {
 			message: lang[Request.lang].chatDelete,
-			data: []
+			data: [],
 		};
 	}
 }
@@ -182,8 +202,8 @@ const makeChatArray = (chats) => {
 				profile: value.profile,
 				user_id: value.friend_id,
 				phone: value.phone,
-				email: value.email
-			}
+				email: value.email,
+			},
 		};
 		if (value.profile.length > 0) {
 			chats.friendInfo.profile = appURL + 'uploads/' + value.profile;
