@@ -6,9 +6,10 @@ const database = {
 		host: process.env.HOST || 'localhost',
 		user: process.env.USERNAME || 'root',
 		password: process.env.PASSWORD || '',
-		database: process.env.DATABASE || ''
+		database: process.env.DATABASE || '',
+		charset: 'utf8mb4',
 	},
-	url: ''
+	url: '',
 };
 
 module.exports = database;
