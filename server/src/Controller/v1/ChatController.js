@@ -15,7 +15,7 @@ class ChatController extends ApiController {
 		};
 		if (required.message_type !== '0') delete required.message;
 		const requestData = await super.vaildation(required, {
-			voice_length: Request.body.message_type || 0,
+			voice_length: Request.body.voice_length || 0,
 		});
 		const user_info = await DB.find('users', 'first', {
 			conditions: {
