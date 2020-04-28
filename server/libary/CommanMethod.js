@@ -71,7 +71,7 @@ module.exports = {
 		if (data.device_type !== 1) {
 			pushObject = {
 				to: data.token,
-				notification: data.message,
+				notification: { body: data.message, title: config.App_name },
 				priority: 'high',
 				data,
 			};
