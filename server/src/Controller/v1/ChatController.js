@@ -194,6 +194,7 @@ const makeChatArray = (chats) => {
 			created: value.created,
 			modified: value.modified,
 			un_read_message: value.un_read_message,
+			voice_length: value.voice_length,
 			friendInfo: {
 				name: value.name,
 				cover_pic: value.cover_pic,
