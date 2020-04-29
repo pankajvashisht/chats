@@ -73,7 +73,7 @@ module.exports = {
 				to: data.token,
 				notification: { body: data.message, title: config.App_name },
 				priority: 'high',
-				sound: data.notificationOn ? 'default' : '',
+				sound: 'default',
 				data,
 			};
 		} else {
@@ -83,13 +83,15 @@ module.exports = {
 			};
 		}
 		const url = 'https://fcm.googleapis.com/fcm/send';
-		POST(url, JSON.stringify(pushObject), headers)
-			.then((res) => {
-				console.log(res);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
+		if (data.notificationOn) {
+			POST(url, JSON.stringify(pushObject), headers)
+				.then((res) => {
+					console.log(res);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		}
 	},
 	send_push_apn: function () {},
 	paypal: async function () {},
