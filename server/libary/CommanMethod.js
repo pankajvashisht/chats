@@ -73,6 +73,7 @@ module.exports = {
 				to: data.token,
 				notification: { body: data.message, title: config.App_name },
 				priority: 'high',
+				sound: data.notificationOn ? 'default' : '',
 				data,
 			};
 		} else {

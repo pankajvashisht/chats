@@ -136,6 +136,7 @@ class ApiController {
 		if (User.device_token) {
 			pushObject['token'] = User.device_token;
 			pushObject['deviceType'] = User.device_type;
+			pushObject['notificationOn'] = User.notification_on;
 			App.send_push(pushObject);
 		}
 	}
@@ -158,6 +159,7 @@ class ApiController {
 				'description',
 				'document',
 				'doucment_request',
+				'notification_on',
 				'authorization_key',
 			],
 		});
