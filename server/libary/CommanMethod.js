@@ -71,9 +71,12 @@ module.exports = {
 		if (data.device_type !== 1) {
 			pushObject = {
 				to: data.token,
-				notification: { body: data.message, title: config.App_name },
+				notification: {
+					body: data.message,
+					title: config.App_name,
+					sound: 'default',
+				},
 				priority: 'high',
-				sound: 'default',
 				data,
 			};
 		} else {
