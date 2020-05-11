@@ -2,9 +2,14 @@ const ApiController = require('./ApiController');
 const app = require('../../../libary/CommanMethod');
 const Db = require('../../../libary/sqlBulider');
 const ApiError = require('../../Exceptions/ApiError');
+
 const { lang } = require('../../../config');
 const DB = new Db();
-
+const messageType = {
+	1: 'sent a video',
+	2: 'sent a audio',
+	3: 'sent a image',
+};
 class ChatController extends ApiController {
 	async sendMessage(Request) {
 		const required = {
@@ -69,9 +74,13 @@ class ChatController extends ApiController {
 		const { userInfo } = Request.body;
 		requestData.user_info = userInfo;
 		requestData.text = requestData.message;
+		const { message, message_type } = requestData;
 		setTimeout(() => {
 			const pushObject = {
-				message: requestData.message,
+				message:
+					parseInt(message_type) === 0
+						? app.decryptMessage(message)
+						: messageType[message_type],
 				notification_code: 8,
 				body: requestData,
 			};

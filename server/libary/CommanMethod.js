@@ -15,7 +15,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 const https = require('https');
 const url = require('url');
-
+const CryptLib = require('./encryptDecrypt');
 module.exports = {
 	send_mail: function (object) {
 		let { nodemailer } = require('./mails');
@@ -61,6 +61,9 @@ module.exports = {
 			throw { code: 415, message: JSON.stringify(err) };
 		}
 	},
+	decryptMessage: (message) => {
+		return CryptLib.decryptCipherTextWithRandomIV(message, 'Listener22446688');
+	},
 	send_push: function (data) {
 		const GOOGLE_KEY = config.GOOGLE_KEY; //put your server key here
 		const headers = {
@@ -68,15 +71,18 @@ module.exports = {
 			'Content-Type': 'application/json',
 		};
 		let pushObject = {};
+		const {
+			user_info: { name = config.App_name },
+		} = data;
 		if (data.device_type !== 1) {
 			pushObject = {
 				to: data.token,
 				notification: {
 					body: data.message,
-					title: config.App_name,
+					title: name,
 					sound: 'default',
+					priority: 'high',
 				},
-				priority: 'high',
 				data,
 			};
 		} else {
