@@ -71,9 +71,10 @@ module.exports = {
 			'Content-Type': 'application/json',
 		};
 		let pushObject = {};
+
 		const {
 			user_info: { name = config.App_name },
-		} = data;
+		} = data.body || {};
 		if (data.device_type !== 1) {
 			pushObject = {
 				to: data.token,
