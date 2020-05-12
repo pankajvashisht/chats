@@ -92,7 +92,6 @@ module.exports = {
 				data,
 			};
 		}
-		console.log(pushObject);
 		const url = 'https://fcm.googleapis.com/fcm/send';
 		if (data.notificationOn) {
 			POST(url, JSON.stringify(pushObject), headers)

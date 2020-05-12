@@ -6,9 +6,9 @@ const ApiError = require('../../Exceptions/ApiError');
 const { lang } = require('../../../config');
 const DB = new Db();
 const messageType = {
-	1: 'sent a video',
+	1: 'sent a audio',
 	2: 'sent a audio',
-	3: 'sent a image',
+	3: 'sent a audio',
 };
 class ChatController extends ApiController {
 	async sendMessage(Request) {
