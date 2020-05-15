@@ -88,14 +88,10 @@ module.exports = {
 			};
 		} else {
 			pushObject = {
-				registration_ids: [
-					data.token,
-					'fqkQc75L460:APA91bE254QfTGfGXyYerMc5-sJ9l0S_FLgs_JS-AblvD0YLJxP3n42MUZeMu11u6CCJVzeNJQLG5601CXdm9p2tvp0aAvQSl4Ga2hrkZSvkpo0ogYl3TnAWFWVlyYxx-tDZYyP2NNj0',
-				],
+				registration_ids: [data.token],
 				data,
 			};
 		}
-		console.log(pushObject);
 		const url = 'https://fcm.googleapis.com/fcm/send';
 		if (data.notificationOn) {
 			POST(url, JSON.stringify(pushObject), headers)
