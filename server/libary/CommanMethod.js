@@ -75,8 +75,7 @@ module.exports = {
 		const {
 			user_info: { name = config.App_name },
 		} = data.body || {};
-		console.log(data);
-		if (data.device_type !== 1) {
+		if (data.deviceType !== 1) {
 			pushObject = {
 				to: data.token,
 				notification: {
