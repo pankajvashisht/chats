@@ -17,8 +17,8 @@ class adminController extends ApiController {
 			let login_details = await DB.find('admins', 'first', {
 				conditions: {
 					email: body.email,
-					status: 1
-				}
+					status: 1,
+				},
 			});
 			if (login_details) {
 				if (app.createHash(body.password) !== login_details.password)
@@ -27,7 +27,7 @@ class adminController extends ApiController {
 				let token = await app.UserToken(login_details.id, req);
 				await DB.save('admins', {
 					id: login_details.id,
-					token: token
+					token: token,
 				});
 				login_details.token = token;
 				if (login_details.profile) {
@@ -35,7 +35,7 @@ class adminController extends ApiController {
 				}
 				return app.success(res, {
 					message: 'User login successfully',
-					data: login_details
+					data: login_details,
 				});
 			}
 			throw new ApiError('Wrong Email or password');
@@ -56,7 +56,7 @@ class adminController extends ApiController {
 		const total = `select count(*) as total from users ${conditions}`;
 		const result = {
 			pagination: await super.Paginations(total, offset, limit),
-			result: app.addUrl(await DB.first(query), [ 'profile', 'document' ])
+			result: app.addUrl(await DB.first(query), ['profile', 'document']),
 		};
 		return result;
 	}
@@ -73,7 +73,7 @@ class adminController extends ApiController {
 		const total = `select count(*) as total from users ${conditions}`;
 		const result = {
 			pagination: await super.Paginations(total, offset, limit),
-			result: app.addUrl(await DB.first(query), [ 'profile', 'document' ])
+			result: app.addUrl(await DB.first(query), ['profile', 'document']),
 		};
 		return result;
 	}
@@ -118,7 +118,7 @@ class adminController extends ApiController {
 		const total = `select count(*) as total from gifs ${conditions}`;
 		const result = {
 			pagination: await super.Paginations(total, offset, limit),
-			result: app.addUrl(await DB.first(query), 'image')
+			result: app.addUrl(await DB.first(query), 'image'),
 		};
 		return result;
 	}
@@ -136,7 +136,7 @@ class adminController extends ApiController {
 		const total = `select count(*) as total from posts ${conditions}`;
 		const result = {
 			pagination: await super.Paginations(total, offset, limit),
-			result: app.addUrl(await DB.first(query), 'media')
+			result: app.addUrl(await DB.first(query), 'media'),
 		};
 		return result;
 	}
@@ -153,7 +153,9 @@ class adminController extends ApiController {
 			body.profile = await app.upload_pic_with_await(Request.files.profile);
 		}
 		const admin_id = await DB.save('admins', body);
-		const admin_info = await DB.first(`select * from admins where id = ${admin_id} limit 1`);
+		const admin_info = await DB.first(
+			`select * from admins where id = ${admin_id} limit 1`
+		);
 		if (admin_info[0].profile.length > 0) {
 			admin_info[0].profile = app.ImageUrl(admin_info[0].profile);
 		}
@@ -175,13 +177,15 @@ class adminController extends ApiController {
 			setTimeout(async () => {
 				try {
 					const user = await DB.find('users', 'first', {
-						conditions: { id: body.id }
+						conditions: { id: body.id },
 					});
 					app.send_push({
 						message: 'Admin has approved your request of becoming a Listener.',
 						notification_code: 2,
 						body: {},
-						token: user.device_token
+						deviceType: user.device_type,
+						token: user.device_token,
+						notificationOn: user.notification_on,
 					});
 				} catch (err) {
 					console.log(err);
@@ -204,17 +208,21 @@ class adminController extends ApiController {
 		return [
 			{
 				message: message,
-				tag_id
-			}
+				tag_id,
+			},
 		];
 	}
 
 	async dashboard() {
-		const users = await DB.first('select count(id) as total from users where user_type=0 ');
-		const listern = await DB.first('select count(id) as total from users where user_type=1');
+		const users = await DB.first(
+			'select count(id) as total from users where user_type=0 '
+		);
+		const listern = await DB.first(
+			'select count(id) as total from users where user_type=1'
+		);
 		return {
 			total_users: users[0].total,
-			total_listern: listern[0].total
+			total_listern: listern[0].total,
 		};
 	}
 
