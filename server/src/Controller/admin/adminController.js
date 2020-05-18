@@ -182,7 +182,11 @@ class adminController extends ApiController {
 					app.send_push({
 						message: 'Admin has approved your request of becoming a Listener.',
 						notification_code: 2,
-						body: {},
+						body: {
+							user_info: {
+								name: '',
+							},
+						},
 						deviceType: user.device_type,
 						token: user.device_token,
 						notificationOn: user.notification_on,
