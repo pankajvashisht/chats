@@ -1,13 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const { UserController, ChatController } = require('../src/Controller/v1/index');
+const {
+	UserController,
+	ChatController,
+} = require('../src/Controller/v1/index');
 const { userSignup } = require('../src/Request');
 const { UserAuth, cross, Language } = require('../src/middleware/index');
 const Apiresponse = require('../libary/ApiResponse');
 const user = new UserController();
 const Chat = new ChatController();
-router.use([ cross, Language, UserAuth ]);
-router.get('/', function(req, res) {
+router.use([cross, Language, UserAuth]);
+router.get('/', function (req, res) {
 	res.send(' APi workings ');
 });
 
@@ -27,5 +30,10 @@ router.delete('/delete-thread', Apiresponse(Chat.deleteChat));
 router.delete('/delete-message', Apiresponse(Chat.deletesingleMessage));
 router.get('/document-status', Apiresponse(user.documentInfo));
 router.patch('/read-message/:chat_id([0-9]+)', Apiresponse(Chat.readMessage));
-
+router
+	.route('/block/:offset([0-9]+)?')
+	.get(response(user.blockUserListing))
+	.post(response(user.blockUser))
+	.put(response(user.blockUser))
+	.delete(response(user.blockUser));
 module.exports = router;

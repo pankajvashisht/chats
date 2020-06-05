@@ -128,7 +128,7 @@ class ChatController extends ApiController {
 		const user_id = Request.body.user_id;
 		const query = `select chats.*, users.id as friend_id,(select count(id) from chats  where is_read = 0 and receiver_id = ${user_id} and sender_id = users.id) as un_read_message, users.profile,users.user_type, users.phone,users.email, users.name, users.cover_pic, users.about_us
 		from threads join chats on (chats.id = threads.last_chat_id) join users on (users.id = IF(user_id = ${user_id}, friend_id, user_id ))
-		where (user_id = ${user_id} or  friend_id = ${user_id}) and chats.id > IF(threads.user_id = ${user_id}, threads.first_friend_deleted_id, threads.second_friend_deleted_id)  order by chats.id desc`;
+		where block_chat = 0 and (user_id = ${user_id} or  friend_id = ${user_id}) and chats.id > IF(threads.user_id = ${user_id}, threads.first_friend_deleted_id, threads.second_friend_deleted_id)  order by chats.id desc`;
 		return {
 			message: lang[Request.lang].lastChat,
 			data: makeChatArray(await DB.first(query)),

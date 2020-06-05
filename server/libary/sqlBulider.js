@@ -64,6 +64,14 @@ class Query {
 							}
 							its_first++;
 						}
+					} else if (c === 'subquery') {
+						const a = condition.conditions[c];
+						if (its_first === 0) {
+							query += ` (${a[0]}) ${a[1]} ${a[2]} `;
+						} else {
+							query += ` and (${a[0]}) ${a[1]} ${a[2]} `;
+						}
+						its_first++;
 					} else if (c === 'FIND_IN_SET') {
 						if (its_first === 0) {
 							query += ` FIND_IN_SET(${condition.conditions[c][0]}, ${condition.conditions[c][1]}) `;

@@ -10,6 +10,7 @@ class UserController extends ApiController {
 		super();
 		this.addUser = this.addUser.bind(this);
 		this.loginUser = this.loginUser.bind(this);
+		this.blockUser = this.blockUser.bind(this);
 	}
 
 	async addUser(Request) {
@@ -140,6 +141,34 @@ class UserController extends ApiController {
 		};
 	}
 
+	async blockUser(Request) {
+		const required = {
+			friend_id: Request.body.friend_id,
+			user_id: Request.body.user_id,
+		};
+		const RequestData = await super.vaildation(required, non_required);
+		const { user_id, friend_id } = RequestData;
+		const checkBlock = DB.find('block_users', 'first', {
+			conditions: {
+				user_id,
+				friend_id,
+			},
+		});
+		let message = '';
+		if (checkBlock) {
+			message = 'User unblock successfully';
+			await DB.first(`delete from block_users where id = ${checkBlock.id}`);
+			this.blockChat(user_id, friend_id, 0);
+		} else {
+			message = 'User block successfully';
+			await DB.save('block_users', RequestData);
+			this.blockChat(user_id, friend_id, 1);
+		}
+		return {
+			message,
+		};
+	}
+
 	async loginUser(req) {
 		const required = {
 			email: req.body.email,
@@ -195,6 +224,11 @@ class UserController extends ApiController {
 				NotEqual: {
 					id: user_id,
 				},
+				subquery: [
+					`(select count(id) from block_users where (user_id=${user_id} and friend_id=users.id) or (user_id=users.id and friend_id=${user_id}))`,
+					'=',
+					0,
+				],
 			},
 			fields: [
 				'users.id',
@@ -230,6 +264,55 @@ class UserController extends ApiController {
 			message,
 			data: {
 				pagination: await super.Paginations('users', condition, page, limit),
+				result: app.addUrl(user_info, ['profile', 'cover_pic', 'document']),
+			},
+		};
+	}
+
+	async blockUserListing(Request) {
+		const user_id = Request.body.user_id || 0;
+		let offset = Request.params.offset || 1;
+		const { search = '', limit = 10 } = Request.query;
+		const page = parseInt(offset);
+		offset = (offset - 1) * limit;
+		const condition = {
+			conditions: {
+				user_id,
+			},
+			join: ['users on (users.id = block_users.friend_id)'],
+			fields: [
+				'users.id',
+				'users.name',
+				'users.status',
+				'users.email',
+				'users.cover_pic',
+				'users.about_us',
+				'users.description',
+				'users.user_type',
+				'users.document',
+				'users.doucment_request',
+				'users.profile',
+			],
+			limit: [offset, limit],
+			orderBy: ['users.name asc'],
+		};
+		if (search) {
+			condition.conditions['like'] = {
+				name: search,
+				email: search,
+			};
+		}
+		const user_info = await DB.find('block_users', 'all', condition);
+		const message = 'block users listing';
+		return {
+			message,
+			data: {
+				pagination: await super.Paginations(
+					'block_users',
+					condition,
+					page,
+					limit
+				),
 				result: app.addUrl(user_info, ['profile', 'cover_pic', 'document']),
 			},
 		};
@@ -304,6 +387,11 @@ class UserController extends ApiController {
 			message: 'User Logout successfully',
 			data: [],
 		};
+	}
+	blockChat(user_id, friend_id, type) {
+		DB.first(
+			`update threads set block_chat=${type} where (user_id=${user_id} and friend_id=${friend_id}) or (user_id=${friend_id} and friend_id=${user_id})`
+		);
 	}
 	mails(request_data) {
 		let mail = {
