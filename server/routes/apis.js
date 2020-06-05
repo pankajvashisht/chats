@@ -32,8 +32,8 @@ router.get('/document-status', Apiresponse(user.documentInfo));
 router.patch('/read-message/:chat_id([0-9]+)', Apiresponse(Chat.readMessage));
 router
 	.route('/block/:offset([0-9]+)?')
-	.get(response(user.blockUserListing))
-	.post(response(user.blockUser))
-	.put(response(user.blockUser))
-	.delete(response(user.blockUser));
+	.get(Apiresponse(user.blockUserListing))
+	.post(Apiresponse(user.blockUser))
+	.put(Apiresponse(user.blockUser))
+	.delete(Apiresponse(user.blockUser));
 module.exports = router;
