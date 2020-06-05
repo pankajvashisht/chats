@@ -146,7 +146,7 @@ class UserController extends ApiController {
 			friend_id: Request.body.friend_id,
 			user_id: Request.body.user_id,
 		};
-		const RequestData = await super.vaildation(required, non_required);
+		const RequestData = await super.vaildation(required, {});
 		const { user_id, friend_id } = RequestData;
 		const checkBlock = DB.find('block_users', 'first', {
 			conditions: {
